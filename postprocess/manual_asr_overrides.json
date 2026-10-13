@@ -1,0 +1,10 @@
+[
+  {
+    "arm": "qwen3_wxyz",
+    "split": "dynamic",
+    "sample_id": "569e3a5695643b5056cc7eaa",
+    "raw_sha256": "29af499aef9f90de1e538f6c431988488809fd5e5a7ceb312b5e00a001f1a286",
+    "transcript": "but the voices were not soothing that came to her from the darkness and the sky above and the stars",
+    "reason": "Read complete response: final paragraph is the sole submitted transcript following explicit statement that it will transcribe all speech; retain wording without assessing truth."
+  }
+]

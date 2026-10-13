@@ -1,0 +1,22 @@
+{
+  "scoring_revision": "dish_exhibition_v3.score.4",
+  "postprocess_version": "gold_blind_content_v1",
+  "frozen_files": {
+    "review_asr_score4.py": {
+      "sha256": "e2118cabca2d8bdcbef5a4db3b4dbdda31295dee233dac7fefd7cb6e4cc2cce2"
+    },
+    "schema_repair.py": {
+      "sha256": "df5457049fa97201befa5cde71b73508935a0a2bde9071c753a9704a2a11d7fc"
+    },
+    "normalization.py": {
+      "sha256": "c59247764a80b3298acf791756775ea98cae15961e8feb9f45c1192963fa3365"
+    },
+    "manual_asr_overrides.json": {
+      "sha256": "81e07b47d9316542dac487a4230677672401a2ceb3b22f445dc424ae7c9685a3"
+    },
+    "asr_review_policy.json": {
+      "sha256": "35d3dcaae3b1f4031fcf67340404971fae66b225fd89dacc7eaf22fd30d7d075"
+    }
+  },
+  "scope": "Unchanged deterministic extraction and syntax/schema repair; source-machine batch entrypoint omitted."
+}

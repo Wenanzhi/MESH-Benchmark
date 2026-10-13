@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "model_inference_run": false,
+  "task_types": 13,
+  "empty_region_control": true,
+  "task_score_equivalence_cases": 42,
+  "input_context_equivalence_cases": 102,
+  "real_foa_loading_splits": 2,
+  "helper_function_bodies_unchanged": 9,
+  "core_source_files_byte_identical": 10,
+  "regression_suites": [
+    "tests",
+    "overall"
+  ],
+  "original_and_packaged_results_identical": true,
+  "task_protocol": "dish_exhibition_v3.tasks.3",
+  "scorer": "dish_exhibition_v3.score.4",
+  "overall_protocol": "dish_case_equal_two_objectives_v1",
+  "extractor_functions_and_regex_patterns_unchanged": true,
+  "anonymous_content_scan_passed": true
+}

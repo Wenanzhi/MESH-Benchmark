@@ -1,0 +1,10 @@
+{
+  "version": "gold_blind_content_v1",
+  "gold_access": false,
+  "audio_retranscription": false,
+  "extraction": "explicitly asserted transcript only; exact source words; preserve repetitions and hallucinated candidates",
+  "null_policy": "no recoverable transcript; official scorer counts all reference words deleted and rejects empty-negative credit",
+  "ambiguous_short_answer": "retained and flagged; yes/no may be actual recognized words, never inferred from gold",
+  "empty_policy": "only original empty string or explicit model assertion of no target",
+  "script_sha256": "e572240597feb444f00dd2f7b381afc6ff30971b2f5aa7ee56e6fe747fad9782"
+}

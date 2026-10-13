@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mesh-bench-evaluation"
+version = "0.1.0"
+description = "Evaluation tools for distributed spatial speech understanding"
+requires-python = ">=3.12"
+dependencies = ["numpy==2.5.2", "scipy==1.18.0", "soundfile==0.14.0"]
+
+[tool.setuptools.packages.find]
+include = ["exhibition_v3*", "exhibition_dataset*", "dynamic_dataset*", "dynamic_demo*"]
