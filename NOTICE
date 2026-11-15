@@ -1,0 +1,9 @@
+MESH-Benchmark
+Copyright 2026 MESH-Benchmark contributors
+
+Project-authored code and documentation are licensed under the Apache
+License, Version 2.0. Third-party materials retain their original licenses.
+The project license does not relicense benchmark recordings, source speech,
+environmental audio, HRTFs, model weights, or other third-party assets.
+
+See docs/licenses-and-attributions.md for component-specific attribution.
