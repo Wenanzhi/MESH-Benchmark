@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Explore MESH spatial hearing scenes and compare frozen baseline results on the same question.">
+  <title>MESH · Spatial hearing explorer</title>
+  <link rel="stylesheet" href="style.css"><link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<header class="topbar"><a class="brand" href="./"><span class="brand-icon" aria-hidden="true">M</span>MESH<span class="brand-detail">Spatial hearing explorer</span></a>
+  <nav aria-label="Resources"><a href="https://arxiv.org/abs/2611.16787">Paper ↗</a><a href="https://huggingface.co/datasets/Heiheihaha17/MESH-Benchmark">Dataset ↗</a><a href="https://github.com/Wenanzhi/MESH-Benchmark">Code ↗</a></nav>
+</header>
+<main>
+  <section class="intro"><div><div class="eyebrow">MULTI-RECEIVER SPATIAL HEARING</div><h1>Hear the scene.<br>Compare the understanding.</h1><p>Explore speech, position and motion from different listening perspectives.<br>Compare published baselines on the very same question.</p></div>
+    <div class="intro-stats"><div><b>2,400</b><span>scene realizations</span></div><div><b>13</b><span>spatial hearing tasks</span></div><div><b>12</b><span>baseline configurations</span></div></div>
+  </section>
+  <div class="tabs" role="tablist" aria-label="Explorer views"><button id="explore-tab" role="tab" aria-selected="true" aria-controls="explore">Explore & compare</button><button id="results-tab" role="tab" aria-selected="false" aria-controls="published">Paper results</button><button id="coverage-tab" role="tab" aria-selected="false" aria-controls="coverage">Coverage & provenance</button><span class="frozen"><span></span>Frozen predictions · no live inference</span></div>
+  <div id="global-status" role="status">Loading the question index…</div>
+  <section id="explore" role="tabpanel" aria-labelledby="explore-tab">
+    <div class="examples"><span>Start with a scene</span><div id="defaults"></div><label class="diagnostic-label">Archived paper cases<select id="diagnostics" aria-label="Archived paper diagnostic cases"><option value="">Choose a diagnostic case</option></select></label></div>
+    <div class="workspace">
+      <aside class="browser"><div class="eyebrow">QUESTION LIBRARY</div><h2>Find a question</h2><label>Search IDs or room<input id="search" type="search" placeholder="Question, scene, room…"></label><div class="filter-pair"><label>View<select id="view"><option value="">Both views</option><option value="edge">Egocentric</option><option value="cloud">Allocentric</option></select></label><label>Motion<select id="mode"><option value="">All motion</option><option value="static">Static</option><option value="dynamic">Dynamic</option></select></label></div><label>Task<select id="task"><option value="">All 13 tasks</option></select></label><label class="check"><input id="only-archived" type="checkbox"> Has archived output</label><div class="list-head"><span id="count"></span><button id="reset-filters" class="text-button">Reset</button></div><div id="question-list" class="question-list" aria-label="Questions"></div><div class="pagination"><button id="prev-page" aria-label="Previous page">←</button><span id="page-count"></span><button id="next-page" aria-label="Next page">→</button></div></aside>
+      <div id="detail" class="detail" aria-busy="true">
+        <div class="question-heading"><div><div id="question-tags" class="tags"></div><h2 id="question-title">Loading…</h2><p id="question-id" class="mono"></p></div><button id="copy-link" title="Copy a link to this question">Copy link</button></div>
+        <p id="case-note" class="note" hidden></p><p id="detail-error" role="alert" hidden></p>
+        <div id="scene-content" hidden>
+          <div class="scene-grid"><section class="panel scene-panel"><div class="panel-heading"><h3>Shared sound field</h3><span class="tag truth">Evaluator view</span></div><div class="canvas-wrap"><canvas id="scene-map" width="900" height="540" role="img" aria-label="Top view of source and receiver positions"></canvas></div><p class="legend"><span class="dot human"></span>Human <span class="dot receiver"></span>Receiver <span class="dot target"></span>Target <span class="legend-note">World X/Z plane · meters · Y is up</span></p><p id="scene-facts" class="small"></p></section>
+          <section class="panel task-panel"><div class="panel-heading"><h3 id="task-plot-title">Spatial answer</h3><span class="tag">Reference & overlays</span></div><canvas id="task-map" width="650" height="540" role="img" aria-label="Reference and selected model spatial answers"></canvas><p id="plot-note" class="small"></p></section></div>
+          <section class="panel playback"><div class="player-row"><button id="play" class="primary">▶ Listen</button><label>Receiver<select id="receiver"></select></label><output id="clock">0.00 / 0.00 s</output><label class="volume">Volume<input id="volume" type="range" min="0" max="1" step="0.05" value="0.7"></label></div><div class="timeline-wrap"><canvas id="waveform" width="1100" height="72" aria-hidden="true"></canvas><input id="timeline" aria-label="Scene time in seconds" type="range" min="0" max="1" step="0.01" value="0"></div><p id="audio-status" role="status" class="small">Choose Listen to load audio.</p><p class="small">Browser playback: FOA decoded to binaural with MIT KEMAR filters. Baseline input formats are listed below. Only the question’s permitted recordings can be selected.</p></section>
+          <section class="panel input-panel"><div class="panel-heading"><h3>Question & allowed information</h3><span id="input-condition" class="tag"></span></div><p id="cue"></p><details><summary>Exact prompt, query and recording identities</summary><pre id="prompt"></pre><pre id="input-json"></pre></details></section>
+          <section class="reference-panel"><div class="panel-heading"><h3>Reference answer</h3><span class="tag truth">Evaluator only</span></div><div id="reference" class="answer"></div><details><summary>Full reference and coordinates</summary><pre id="reference-json"></pre></details></section>
+          <section class="comparison"><div class="comparison-heading"><div><div class="eyebrow">SAME QUESTION · ALL CONFIGURATIONS</div><h2>Baseline comparison</h2></div><span id="output-count" class="tag"></span></div><p class="small">Scores are copied from frozen evaluation records. Unarchived answers stay unavailable; they are not empty predictions or unrun experiments. WER is uncapped. This page does not compute an Overall score.</p><div id="baseline-rows"></div></section>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="published" role="tabpanel" aria-labelledby="results-tab" hidden><div class="section-intro"><div class="eyebrow">FULL EVALUATION</div><h2>Published paper results</h2><p>Exact cells from arXiv v1. Localization accuracy ↑ and corpus WER ↓ are percentages. Each view has a separate Overall ↑. These aggregate results are distinct from the per-question scores.</p></div><div id="result-tables"></div></section>
+  <section id="coverage" role="tabpanel" aria-labelledby="coverage-tab" hidden><div class="section-intro"><div class="eyebrow">VERSIONED EVIDENCE</div><h2>What is available?</h2><p id="availability"></p></div><div id="coverage-table" class="table-scroll"></div><p>Default scenes are selected by dataset conditions and lexical question IDs, without model scores. “Archived paper cases” are diagnostic examples selected for the paper and are not a representative sample.</p><p>Scene geometry and reference answers are evaluator-only information. The exact public prompt shows what the model was allowed to receive. No new inference or scoring is performed by this explorer.</p><details open><summary>Release binding and file hashes</summary><pre id="provenance"></pre></details><p><a href="data/provenance.json">Download provenance JSON</a> · <a href="data/baselines.json">Baseline registry</a> · <a href="https://github.com/Wenanzhi/MESH-Benchmark/blob/main/docs/demo.md">Reproduce the export</a></p></section>
+</main>
+<footer><span>MESH · Multi-receiver Evaluation of Spatial Hearing</span><span><a href="https://github.com/Wenanzhi/MESH-Benchmark/blob/main/docs/licenses-and-attributions.md">Licenses & attribution</a> · <a href="https://github.com/Wenanzhi/MESH-Benchmark/issues">Report an issue</a></span></footer>
+<script type="module" src="app.js"></script>
+</body></html>
