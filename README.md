@@ -1,6 +1,6 @@
 # MESH-Bench evaluation
 
-Review distribution of the evaluation tools for distributed spatial speech understanding. The dataset is distributed separately. This repository contains no recordings, reference transcripts, model checkpoints, generation pipeline, or experimental prediction files.
+Evaluation tools for distributed spatial speech understanding. The full dataset is distributed separately. The `demo/` explorer includes compact frozen per-question scores and selected archived baseline outputs; audio and reference scene assets load from pinned external revisions. Model weights and the full recordings are not bundled here. See [the explorer documentation](docs/demo.md) for coverage and provenance.
 
 Use Python 3.12 and install from this repository:
 

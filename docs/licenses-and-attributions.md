@@ -25,6 +25,14 @@ measurements by Bill Gardner and Keith Martin. See the
 and [application data notices](https://github.com/Wenanzhi/dish-listening-review/blob/main/DATA_LICENSES.md).
 An HRTF attribution is separate from the Apache license for project code.
 
+This repository's explorer reuses the player from listening-review revision
+`c18bd9515a430a79673a0fb3d0f982d7f3135001`. Its MIT notice is retained in
+[`demo/assets/listening-MIT.txt`](../demo/assets/listening-MIT.txt); the copied
+decoder and source HRTF are documented in
+[`demo/assets/ATTRIBUTION.md`](../demo/assets/ATTRIBUTION.md). Selected model
+responses and their quoted reference text are research-result artifacts; the
+code license does not grant additional rights to third-party text.
+
 For redistribution, retain applicable notices and the source-attribution records
 for the particular assets used. No source audio, model weights or HRTF recordings
 are relicensed by this repository.
