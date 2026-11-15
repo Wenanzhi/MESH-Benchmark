@@ -25,7 +25,32 @@ Use `dynamic` for dynamic tasks and `audio=False` when inspecting prompts. Egoce
 
 The loader supports the released input-context variants, including removal of peer poses and playback information, and validated `cue_variant` queries. Compare only their common eligible sample IDs. See the dataset's `public/ablation_recipes.json` and `public/test/spatial_query_variants.jsonl`.
 
+## Prediction routes
+
+Prepare separate static and dynamic JSONL files using the real public question IDs.
+The two supported file formats enter the evaluation at different stages:
+
+| Prediction file | Required fields per line | Next step |
+| --- | --- | --- |
+| Raw model text | `sample_id`, `task_id`, string `raw_text` | Fixed response processing below |
+| Task-specific structured output | `sample_id`, `output` | [Official task scoring](#official-task-scoring) |
+
+The general `python -m exhibition_dataset.loader --adapter my_model:predict`
+runner writes the second format. Supply your own `my_model.py`; its
+`predict(sample)` returns only the task-specific output value. The runner adds
+the question ID. See the [complete adapter commands](../README.md#b-structured-predictions).
+Model-specific baseline adapters are not bundled in this package.
+
+Raw-text files retain actual model responses; failed requests belong in a separate
+failure log and must not become empty transcripts. Structured outputs can retain
+a failed request as `output: null` alongside its error log. Missing/invalid answers
+remain failures when the scorer evaluates the complete released population.
+
 ## Fixed response processing
+
+This section applies only to raw-text files. If your predictions already follow
+the structured task schema, pass them directly to the scorer; do not send them
+through this text processor.
 
 Save raw responses as JSONL with `sample_id`, `task_id`, and string `raw_text`. The task ID comes from the public index, not from a reference answer. Never turn a failed request or null output into an empty string.
 
@@ -34,7 +59,7 @@ python postprocess/postprocess_predictions.py --predictions raw_static.jsonl --o
 python postprocess/postprocess_predictions.py --predictions raw_dynamic.jsonl --output-dir processed/dynamic
 ```
 
-Both output directories must be new. The driver produces `raw_predictions.jsonl`, `baseline_predictions.jsonl`, `reviewed_predictions.jsonl`, a per-question audit, and a completion receipt. The published comparison uses the reviewed predictions. It applies deterministic syntax/schema conversion and gold-blind extraction of explicitly asserted transcript text. It never estimates missing coordinates, selects content using gold, retranscribes audio, or removes repetitions from a claimed transcript. A refusal is not a correct empty-region answer.
+Both output directories must be new. The driver produces `raw_predictions.jsonl`, `baseline_predictions.jsonl`, `reviewed_predictions.jsonl`, a per-question audit, and a completion receipt. The published LALM comparison uses the reviewed predictions; the frozen Agent V2 uses its structured outputs. Text processing applies deterministic syntax/schema conversion and gold-blind extraction of explicitly asserted transcript text. It never estimates missing coordinates, selects content using gold, retranscribes audio, or removes repetitions from a claimed transcript. A refusal is not a correct empty-region answer.
 
 The optional `manual_asr_overrides.json` is a hash-checked extraction for a named historical response. It is not applied by default and must not be transferred to a new model run. See [the processing policy](../postprocess/asr_review_policy.json). The old source-machine batch runner is omitted; the extraction functions and patterns are preserved.
 
@@ -46,6 +71,10 @@ python -m exhibition_v3.score --root /path/to/dataset/dynamic --predictions proc
 ```
 
 Predictions have `sample_id` and `output`. The scorer writes `metrics.json` and `per_sample.jsonl.gz`, retaining the full reference population. Missing and invalid predictions reduce accuracy and coverage; error means over covered predictions do not replace success rates.
+
+For structured predictions, replace the two `--predictions` paths above with
+your static and dynamic JSONL files. Both routes produce the same score-file
+format for the Overall aggregator below.
 
 | Setting | Tasks | Main task metrics |
 |---|---|---|
