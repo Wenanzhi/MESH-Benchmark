@@ -1,0 +1,46 @@
+cff-version: 1.2.0
+message: "Please cite the MESH paper when using this benchmark. Wen Wen and Bohan Li contributed equally."
+type: software
+title: MESH-Benchmark
+version: 0.2.0
+date-released: 2026-11-15
+license: Apache-2.0
+repository-code: https://github.com/Wenanzhi/MESH-Benchmark
+authors:
+  - family-names: Wen
+    given-names: Wen
+  - family-names: Li
+    given-names: Bohan
+  - family-names: Tam
+    given-names: KwanHo
+  - family-names: Xi
+    given-names: Yu
+  - family-names: Peng
+    given-names: Jing
+  - family-names: Wang
+    given-names: Shuai
+  - family-names: Yu
+    given-names: Kai
+preferred-citation:
+  type: article
+  title: "MESH: Multi-receiver Evaluation of Spatial Hearing across Egocentric and Allocentric Views"
+  authors:
+    - family-names: Wen
+      given-names: Wen
+    - family-names: Li
+      given-names: Bohan
+    - family-names: Tam
+      given-names: KwanHo
+    - family-names: Xi
+      given-names: Yu
+    - family-names: Peng
+      given-names: Jing
+    - family-names: Wang
+      given-names: Shuai
+    - family-names: Yu
+      given-names: Kai
+  journal: arXiv
+  year: 2026
+  month: 11
+  doi: 10.48550/arXiv.2611.16787
+  url: https://arxiv.org/abs/2611.16787

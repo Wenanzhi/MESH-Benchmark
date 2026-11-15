@@ -1,0 +1,93 @@
+{
+  "scope": "Website and documentation release; no new inference or rescoring",
+  "demo_source_commit": "6b299ba9075b98853a964d7fe56093e12d2cd867",
+  "demo_tree": "1cd6d311109a9de5bc677780bb17902686a20924",
+  "pages_commit": "da8d11a606a85d7d4725c5dc594981e00fdcc3f6",
+  "pages_build": "https://github.com/Wenanzhi/MESH-Benchmark/actions/runs/43693507634",
+  "frozen_evaluation_source": "333a15985a27764b56d2075d5d3f0f7987553faf",
+  "unchanged_original_files": 33,
+  "original_file_exceptions": {
+    "README.md": "Project homepage",
+    "pyproject.toml": "Apache-2.0 license metadata only"
+  },
+  "validation": {
+    "existing_python_tests": {
+      "overall": 7,
+      "contracts": 8,
+      "status": "passed"
+    },
+    "node_tests": {
+      "passed": 7,
+      "scope": "frozen display values, missing states and verified range downloads"
+    },
+    "export_integrity": {
+      "questions": 39999,
+      "configurations": 12,
+      "metrics": 479988,
+      "output_records": 47,
+      "output_questions": 24,
+      "status": "passed"
+    },
+    "citation_cff": "cffconvert schema 1.2.0 passed",
+    "documentation": {
+      "markdown_links_checked": 67,
+      "readme_result_rows_match_frozen_source": 12
+    }
+  },
+  "live_browser": {
+    "base": "https://wenanzhi.github.io/MESH-Benchmark/",
+    "checked_at": "2026-11-15T08:23:37.548Z",
+    "checks": [
+      {
+        "question": "00453216fc112c99fd735b2c",
+        "metrics": 12,
+        "outputs": 11
+      },
+      {
+        "question": "00afedbe599a7a8dfd77cd0d",
+        "metrics": 12,
+        "outputs": 11
+      },
+      {
+        "question": "00da58508b0fad2b736898a7",
+        "metrics": 12,
+        "outputs": 1
+      },
+      {
+        "question": "02951f24479cfd1f175dcff1",
+        "metrics": 12,
+        "outputs": 1
+      },
+      {
+        "question": "00007d1e73392d04146f47c1",
+        "metrics": 12,
+        "outputs": 0
+      },
+      {
+        "audio": "two real remote recordings verified, decoded and played",
+        "receiver_switch_time": 2.75
+      },
+      {
+        "mobile": "390px, all rows present, no horizontal overflow"
+      }
+    ],
+    "errors": []
+  },
+  "limitations": {
+    "hf_card_sync": "Deferred by owner; proposal retained separately",
+    "custom_ci": "Inactive templates; publishing credential lacks workflow scope",
+    "full_original_outputs": "Not recovered; complete frozen metrics and selected actual outputs shipped"
+  },
+  "readme_screenshot": {
+    "url": "https://wenanzhi.github.io/MESH-Benchmark/?q=00453216fc112c99fd735b2c",
+    "timestamp": "2026-11-15T08:28:25.672Z",
+    "audio": "R01 ready \u00b7 SHA-256 verified \u00b7 binaural playback",
+    "viewport": {
+      "width": 1440,
+      "height": 1700
+    },
+    "scroll_y": 435,
+    "file": "assets/demo-preview.png",
+    "sha256": "ca5aed30b87e98808a9c16ec7e0abca38d2acd7a5e2a148f71226eb50e51e10a"
+  }
+}

@@ -21,3 +21,12 @@ and Node display/download tests, then `scripts/check_demo.mjs` with Playwright.
 For a live check, set `DEMO_URL=https://wenanzhi.github.io/MESH-Benchmark/`.
 Browser receipts include the tested URL, timestamp, question IDs and audio/mobile
 checks. Do not substitute fixtures for the live audio test without reporting it.
+
+## Hugging Face synchronization
+
+`huggingface-card.md` is the prepared replacement for the dataset README.
+The owner deferred HF synchronization on 2026-11-15 because this machine has no
+usable HF credentials. The live card has **not** been updated. When authentication
+is available, compare the current card before applying this proposal; preserve
+any intervening maintainer changes. Only the card changes, not audio, labels or
+internal task IDs.

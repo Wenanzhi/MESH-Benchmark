@@ -1,6 +1,7 @@
 # Data and baseline explorer
 
-The explorer in `demo/` is a static application for inspecting the published
+The [live explorer](https://wenanzhi.github.io/MESH-Benchmark/) in `demo/` is a
+static application for inspecting the published
 dataset and comparing frozen baselines on a single question. It has no inference
 server, reviewer identity, listening questionnaire or feedback collection.
 The separate [listening-review tool](https://wenanzhi.github.io/dish-listening-review/)
