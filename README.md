@@ -78,3 +78,10 @@ python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
 The review package preserves the scoring functions and prompt behavior while removing generation dependencies and project-owner/source-machine information. `validation.json` records packaging and equivalence checks. Neither successful scoring nor an Overall value establishes that a model's audio adapter or inference configuration was correct.
+
+## License
+
+Project-authored code and documentation are licensed under [Apache-2.0](LICENSE).
+Dataset recordings, source speech, environmental audio, HRTFs, model weights,
+and third-party components retain their respective licenses. See
+[component licenses and attributions](docs/licenses-and-attributions.md).
