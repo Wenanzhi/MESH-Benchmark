@@ -1,87 +1,141 @@
-# MESH-Bench evaluation
+# MESH-Benchmark
 
-Evaluation tools for distributed spatial speech understanding. The full dataset is distributed separately. The `demo/` explorer includes compact frozen per-question scores and selected archived baseline outputs; audio and reference scene assets load from pinned external revisions. Model weights and the full recordings are not bundled here. See [the explorer documentation](docs/demo.md) for coverage and provenance.
+**Multi-receiver Evaluation of Spatial Hearing across Egocentric and Allocentric Views**
 
-Use Python 3.12 and install from this repository:
+Wen Wen\*, Bohan Li\*, KwanHo Tam, Yu Xi, Jing Peng, Shuai Wang, Kai Yu
+
+\*Equal contribution
+
+[Paper](https://arxiv.org/abs/2611.16787) · [Dataset](https://huggingface.co/datasets/Heiheihaha17/MESH-Benchmark) · [Interactive demo](https://wenanzhi.github.io/MESH-Benchmark/) · [Evaluation](docs/evaluation.md) · [Citation](#citation)
+
+MESH evaluates whether a system can associate speech content with source position
+across receiving perspectives and maintain that association as sources or receivers
+move. Its 13 tasks require spatial estimates, trajectories and spatially grounded
+transcriptions in simulated multi-speaker scenes, with synchronized recordings at
+multiple receiving points.
+
+## Explore the data and baselines
+
+**[Open the data and baseline explorer →](https://wenanzhi.github.io/MESH-Benchmark/)**
+
+Listen from the permitted receivers, inspect source positions and motion, and
+compare all 12 published configurations on the same question. The site displays
+frozen evaluation records and separates model inputs from evaluator-only answers.
+
+[![MESH explorer showing a shared acoustic scene, the spatial query, reference transcript and archived baseline responses](assets/demo-preview.png)](https://wenanzhi.github.io/MESH-Benchmark/?q=00453216fc112c99fd735b2c)
+
+*Actual explorer screenshot of a selected paper diagnostic case.*
+
+All **39,999 questions** and **479,988 per-question score records** are available.
+Actual archived outputs currently cover **47 records on 24 diagnostic questions**;
+other rows explicitly show “Output not archived.” These selected cases do not
+represent the full test distribution. MESH-agent's frozen scores cover the full
+test even though its original outputs are not available in the explorer.
+See [coverage and provenance](docs/demo.md).
+
+## Benchmark at a glance
+
+Egocentric tasks use one focal recording and permitted peer metadata. Allocentric
+tasks use all synchronized receiver recordings and their permitted metadata.
+Environmental sound acts as interference; the target is multi-speaker speech.
+
+| Perspective | Static tasks | Dynamic tasks |
+| --- | --- | --- |
+| Egocentric | Direction; distance; content-conditioned direction and distance; spatially cued transcription | Direction tracking; distance tracking; spatially cued transcription under motion |
+| Allocentric | Source positions; content-conditioned position; region-cued transcription | Content-conditioned position tracking; trajectory-cued transcription |
+
+See [all 13 task definitions and permitted inputs](docs/tasks-and-inputs.md).
+
+| Released data | Count |
+| --- | ---: |
+| Rooms / base scenes | 100 / 800 |
+| Static / dynamic scene realizations | 800 / 1,600 |
+| Receiver recordings | 4,761 |
+| Static / dynamic questions | 19,117 / 20,882 |
+| Distinct human speaker identities | 299 |
+
+Audio is 16 kHz, four-channel first-order ambisonics (FOA), in ACN/SN3D
+`[W, Y, Z, X]` order. Dynamic spatial answers use a 0.5-second grid.
+Download the complete [HF release](https://huggingface.co/datasets/Heiheihaha17/MESH-Benchmark/tree/f7ca282fbb610206fe12336037c6cd0e587a7e55)
+and preserve its directory structure; see [dataset documentation](docs/dataset.md).
+
+## Published results
+
+Overall scores below are copied from the frozen paper tables; higher is better.
+Each perspective combines localization and semantic performance with equal
+objective weights and equal question weights within each objective. Overall is
+not an average of task columns or `1 − corpus WER`.
+
+| Model | Input | Egocentric Overall ↑ | Allocentric Overall ↑ |
+| --- | --- | ---: | ---: |
+| Qwen3-Omni | FOA-W | 20.56 | 13.77 |
+| Qwen3-Omni | FOA-sep | 21.41 | 14.22 |
+| Qwen3.5-Omni-Plus | FOA-W | 24.75 | 19.45 |
+| Qwen3.5-Omni-Plus | FOA-sep | 26.52 | 21.86 |
+| BAT | Binaural | 0.07 | 0.04 |
+| MiDasheng-Spatial | Binaural | 13.23 | 15.36 |
+| Spatial-Omni-7B | FOA | 13.66 | 12.55 |
+| Spatial-Omni-30B | FOA | 18.54 | 12.72 |
+| JAEGER Neural | FOA | 2.80 | 6.58 |
+| JAEGER Classical | FOA | 0.94 | 1.21 |
+| Qwen3.8-Omni-Flash | FOA | 30.18 | 15.90 |
+| MESH-agent | FOA | 34.97 | 31.01 |
+
+FOA-W supplies the W channel; FOA-sep supplies four separately labeled mono
+channels. Input conditions and model adapters remain explicit in the
+[baseline registry](demo/data/baselines.json). See the [complete task results](docs/results.md)
+for accuracy, uncapped WER, empty-region handling and interpretation.
+
+## Evaluate and reproduce
+
+Use Python 3.12. Install the evaluation package from the cloned repository:
 
 ```bash
 python -m pip install -e .
 ```
 
-The dataset directory must contain `static/` and `dynamic/`. Preserve the released files and relative paths. The frozen protocol identifiers remain unchanged for compatibility: `dish_exhibition_v3.tasks.3` and `dish_exhibition_v3.score.4`.
+Follow the [full evaluation procedure](docs/evaluation.md) for model inputs,
+fixed response processing, official task scoring and Overall aggregation.
+The scorer, processing policy and original tests are preserved from the initial
+evaluation toolkit. This release performs no new inference or rescoring.
 
-## Model inputs
+| Documentation | Contents |
+| --- | --- |
+| [Dataset](docs/dataset.md) | Complete release, counts, audio format and file layout |
+| [Tasks and inputs](docs/tasks-and-inputs.md) | Task codes, permitted metadata and output conventions |
+| [Evaluation](docs/evaluation.md) | Formal processing and scoring commands |
+| [Reproducibility](docs/reproducibility.md) | Frozen revisions, configuration records and verification |
+| [Explorer](docs/demo.md) | Output coverage, local serving and export regeneration |
+| [Licenses](docs/licenses-and-attributions.md) | Code, dataset and third-party asset terms |
+| [Contributing](CONTRIBUTING.md) | Bug reports and baseline result submissions |
 
-```python
-from exhibition_v3.loader import Dataset
+The release binds dataset revision `f7ca282fbb610206fe12336037c6cd0e587a7e55`,
+task protocol `dish_exhibition_v3.tasks.3`, scorer `dish_exhibition_v3.score.4`
+and Overall `dish_case_equal_two_objectives_v1`.
+Legacy `edge` / `cloud` JSON keys are retained for compatibility.
+See [release metadata](release.json) and the [changelog](CHANGELOG.md).
 
-dataset = Dataset("/path/to/dataset/static")
-sample = dataset.load(dataset.ids()[0])
-# Supply sample["audio"], sample["prompt"], and the permitted public context.
-# Each audio array has shape [samples, 4], in ACN/SN3D [W, Y, Z, X] order.
+## Citation
+
+```bibtex
+@misc{wen2026mesh,
+  title={MESH: Multi-receiver Evaluation of Spatial Hearing across Egocentric and Allocentric Views},
+  author={Wen Wen and Bohan Li and KwanHo Tam and Yu Xi and Jing Peng and Shuai Wang and Kai Yu},
+  year={2026},
+  eprint={2611.16787},
+  archivePrefix={arXiv},
+  url={https://arxiv.org/abs/2611.16787}
+}
 ```
 
-Use `dynamic` for dynamic tasks and `audio=False` when inspecting prompts. Edge questions receive one robot's recording; cloud questions receive all robots' synchronized recordings as separate inputs. Do not downmix FOA silently, concatenate receivers along time, or expose `private/` labels and sibling-question answers to the model. Dynamic spatial labels use a 0.5 s grid.
+Machine-readable citation metadata is provided in [CITATION.cff](CITATION.cff).
 
-The loader supports the released input-context variants, including removal of peer poses and playback information, and validated `cue_variant` queries. Compare only their common eligible sample IDs. See the dataset's `public/ablation_recipes.json` and `public/test/spatial_query_variants.jsonl`.
+## License and contact
 
-## Fixed response processing
+Project-authored code and documentation use [Apache-2.0](LICENSE).
+Dataset recordings, source speech, environmental audio, HRTFs, model weights
+and reused player components retain their [respective licenses](docs/licenses-and-attributions.md).
 
-Save raw responses as JSONL with `sample_id`, `task_id`, and string `raw_text`. The task ID comes from the public index, not from a reference answer. Never turn a failed request or null output into an empty string.
-
-```bash
-python postprocess/postprocess_predictions.py --predictions raw_static.jsonl --output-dir processed/static
-python postprocess/postprocess_predictions.py --predictions raw_dynamic.jsonl --output-dir processed/dynamic
-```
-
-Both output directories must be new. The driver produces `raw_predictions.jsonl`, `baseline_predictions.jsonl`, `reviewed_predictions.jsonl`, a per-question audit, and a completion receipt. The published comparison uses the reviewed predictions. It applies deterministic syntax/schema conversion and gold-blind extraction of explicitly asserted transcript text. It never estimates missing coordinates, selects content using gold, retranscribes audio, or removes repetitions from a claimed transcript. A refusal is not a correct empty-region answer.
-
-The optional `manual_asr_overrides.json` is a hash-checked extraction for a named historical response. It is not applied by default and must not be transferred to a new model run. See [the processing policy](postprocess/asr_review_policy.json). The old source-machine batch runner is omitted; the extraction functions and patterns are preserved.
-
-## Official task scoring
-
-```bash
-python -m exhibition_v3.score --root /path/to/dataset/static --predictions processed/static/reviewed_predictions.jsonl --output scores/static
-python -m exhibition_v3.score --root /path/to/dataset/dynamic --predictions processed/dynamic/reviewed_predictions.jsonl --output scores/dynamic
-```
-
-Predictions have `sample_id` and `output`. The scorer writes `metrics.json` and `per_sample.jsonl.gz`, retaining the full reference population. Missing and invalid predictions reduce accuracy and coverage; error means over covered predictions do not replace success rates.
-
-| Setting | Tasks | Main task metrics |
-|---|---|---|
-| Static edge | DOA, TEXT_DOA; RANGE, TEXT_RANGE; DOA_RANGE_ASR | Acc@20°; RelAcc@20%; corpus WER |
-| Static cloud | C1_SETLOC, C3_TEXTLOC; C2_REGION_ASR | Acc@2 m; corpus WER and separate empty-region accuracy |
-| Dynamic edge | DOA_TRAJECTORY; RANGE_TRAJECTORY; SPATIAL_ASR | Acc@20°; RelAcc@20%; corpus WER |
-| Dynamic cloud | TEXT_TRAJECTORY; WORLD_TRAJECTORY_ASR | Acc@2 m; corpus WER |
-
-Relative distance error is `abs(prediction - truth) / truth`. Distance accuracy averages within each trajectory first and then across questions. Dynamic spatial tasks score target-active frames; DOA identity assignment is fixed for the whole clip. Coordinate conventions, additional thresholds, and empty-target rules are documented in each split's `public/evaluation_protocol.json`. There are no KW-ASR questions in this release.
-
-## Overall scores
-
-```bash
-python overall/overall_score.py --model my_model --static scores/static/per_sample.jsonl.gz --dynamic scores/dynamic/per_sample.jsonl.gz --static-index /path/to/dataset/static/public/test/index.jsonl --dynamic-index /path/to/dataset/dynamic/public/test/index.jsonl --output-dir scores/overall
-```
-
-This uses the current `dish_case_equal_two_objectives_v1` protocol. Ego and Global are reported separately. Within each perspective, localization and semantic scores each receive 50% weight. Within each objective, every question has equal weight across static/dynamic settings and tasks:
-
-- Localization: the mean fraction of successful reference targets or active frames within each question, then the mean across questions.
-- Semantic: `max(0, 1 - edits/reference_words)` for each nonempty-reference question; official empty-answer correctness for each empty-region question.
-- Overall: `100 * (0.5 * localization_mean + 0.5 * semantic_mean)`.
-
-Thus Overall is not reconstructed from corpus WER or from equally weighted task/setting averages. The aggregator requires all 39,999 scored questions, checks their public IDs, and keeps all 800 empty-region negatives. It outputs perspective, task, and split tables, per-case weights, and a completion receipt. Raw corpus WER remains available in the official task metrics.
-
-## Verification
-
-```bash
-python -m unittest discover -s overall -p "test_*.py" -v
-python -m unittest discover -s tests -p "test_*.py" -v
-```
-
-The review package preserves the scoring functions and prompt behavior while removing generation dependencies and project-owner/source-machine information. `validation.json` records packaging and equivalence checks. Neither successful scoring nor an Overall value establishes that a model's audio adapter or inference configuration was correct.
-
-## License
-
-Project-authored code and documentation are licensed under [Apache-2.0](LICENSE).
-Dataset recordings, source speech, environmental audio, HRTFs, model weights,
-and third-party components retain their respective licenses. See
-[component licenses and attributions](docs/licenses-and-attributions.md).
+For bugs or result submissions, use [GitHub issues](https://github.com/Wenanzhi/MESH-Benchmark/issues).
+For research questions: [Wen Wen](mailto:wenyideng@sjtu.edu.cn) and
+[Bohan Li](mailto:everlastingnight@sjtu.edu.cn).

@@ -1,0 +1,23 @@
+name: Bug or data issue
+description: Report a reproducible evaluator, dataset or explorer problem.
+title: "[Bug] "
+body:
+  - type: textarea
+    id: identity
+    attributes:
+      label: Version and question
+      description: Include the code commit, dataset revision, sample ID, task, receivers, or explorer link.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Include the command or UI steps, observed behavior and expected behavior. Do not include secrets.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Python/dependency versions or browser/device details, as relevant.

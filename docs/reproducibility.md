@@ -57,5 +57,7 @@ node --test demo/tests/*.test.mjs
 ```
 
 The existing `validation.json` describes the original package equivalence audit.
-It is not rewritten as evidence for the new website. Website verification and
-deployment belong to the release/PR receipts and GitHub Actions runs.
+It is not rewritten as evidence for the new website. The
+[website verification receipt](maintainers/release-verification-20261115.json)
+records the deployed source, existing tests, frozen-record checks and live
+audio/mobile verification. Release metadata is in [`release.json`](../release.json).

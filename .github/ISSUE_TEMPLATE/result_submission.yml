@@ -1,0 +1,32 @@
+name: Baseline result submission
+description: Submit a fully specified evaluation for review, separate from frozen paper results.
+title: "[Result] "
+body:
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Model and inference configuration
+      description: Model/checkpoint or service revision, audio adapter, receiver/metadata conditions, system prompt, decoding and run identifier.
+    validations:
+      required: true
+  - type: textarea
+    id: versions
+    attributes:
+      label: Dataset and evaluation versions
+      description: Exact dataset revision, task protocol, postprocessing policy, scorer, Overall version and code commit.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Complete output and scoring evidence
+      description: Link complete raw/reviewed predictions, failure records, processing audits, per-question scores, full-population counts, manifests and hashes. Include access terms; do not attach credentials.
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Results and limitations
+      description: Report both views, input differences, unsupported tasks, missing requests and known limitations. Submissions are reviewed before inclusion.
+    validations:
+      required: true
