@@ -2,118 +2,204 @@
 
 **Multi-receiver Evaluation of Spatial Hearing across Egocentric and Allocentric Views**
 
-Wen Wen\*, Bohan Li\*, KwanHo Tam, Yu Xi, Jing Peng, Shuai Wang, Kai Yu
+Wen Wen\*, Bohan Li\*, KwanHo Tam, Yu Xi, Jing Peng, Shuai Wang, Kai Yu (\*equal contribution)
 
-\*Equal contribution
+[Paper](https://arxiv.org/abs/2611.16787) · [Dataset](https://huggingface.co/datasets/Heiheihaha17/MESH-Benchmark) · [Demo](https://wenanzhi.github.io/MESH-Benchmark/) · [Citation](#citation)
 
-[Paper](https://arxiv.org/abs/2611.16787) · [Dataset](https://huggingface.co/datasets/Heiheihaha17/MESH-Benchmark) · [Interactive demo](https://wenanzhi.github.io/MESH-Benchmark/) · [Evaluation](docs/evaluation.md) · [Citation](#citation)
+MESH evaluates the association between speech content and source position across
+receiving perspectives and under motion. This repository provides data loaders,
+response processing, task scoring, Overall aggregation and a frozen-result explorer.
 
-MESH evaluates whether a system can associate speech content with source position
-across receiving perspectives and maintain that association as sources or receivers
-move. Its 13 tasks require spatial estimates, trajectories and spatially grounded
-transcriptions in simulated multi-speaker scenes, with synchronized recordings at
-multiple receiving points.
+## Installation
 
-## Explore the data and baselines
-
-**[Open the data and baseline explorer →](https://wenanzhi.github.io/MESH-Benchmark/)**
-
-Listen from the permitted receivers, inspect source positions and motion, and
-compare all 12 published configurations on the same question. The site displays
-frozen evaluation records and separates model inputs from evaluator-only answers.
-
-[![MESH explorer showing a shared acoustic scene, the spatial query, reference transcript and archived baseline responses](assets/demo-preview.png)](https://wenanzhi.github.io/MESH-Benchmark/?q=00453216fc112c99fd735b2c)
-
-*Actual explorer screenshot of a selected paper diagnostic case.*
-
-All **39,999 questions** and **479,988 per-question score records** are available.
-Actual archived outputs currently cover **47 records on 24 diagnostic questions**;
-other rows explicitly show “Output not archived.” These selected cases do not
-represent the full test distribution. MESH-agent's frozen scores cover the full
-test even though its original outputs are not available in the explorer.
-See [coverage and provenance](docs/demo.md).
-
-## Benchmark at a glance
-
-Egocentric tasks use one focal recording and permitted peer metadata. Allocentric
-tasks use all synchronized receiver recordings and their permitted metadata.
-Environmental sound acts as interference; the target is multi-speaker speech.
-
-| Perspective | Static tasks | Dynamic tasks |
-| --- | --- | --- |
-| Egocentric | Direction; distance; content-conditioned direction and distance; spatially cued transcription | Direction tracking; distance tracking; spatially cued transcription under motion |
-| Allocentric | Source positions; content-conditioned position; region-cued transcription | Content-conditioned position tracking; trajectory-cued transcription |
-
-See [all 13 task definitions and permitted inputs](docs/tasks-and-inputs.md).
-
-| Released data | Count |
-| --- | ---: |
-| Rooms / base scenes | 100 / 800 |
-| Static / dynamic scene realizations | 800 / 1,600 |
-| Receiver recordings | 4,761 |
-| Static / dynamic questions | 19,117 / 20,882 |
-| Distinct human speaker identities | 299 |
-
-Audio is 16 kHz, four-channel first-order ambisonics (FOA), in ACN/SN3D
-`[W, Y, Z, X]` order. Dynamic spatial answers use a 0.5-second grid.
-Download the complete [HF release](https://huggingface.co/datasets/Heiheihaha17/MESH-Benchmark/tree/f7ca282fbb610206fe12336037c6cd0e587a7e55)
-and preserve its directory structure; see [dataset documentation](docs/dataset.md).
-
-## Published results
-
-Overall scores below are copied from the frozen paper tables; higher is better.
-Each perspective combines localization and semantic performance with equal
-objective weights and equal question weights within each objective. Overall is
-not an average of task columns or `1 − corpus WER`.
-
-| Model | Input | Egocentric Overall ↑ | Allocentric Overall ↑ |
-| --- | --- | ---: | ---: |
-| Qwen3-Omni | FOA-W | 20.56 | 13.77 |
-| Qwen3-Omni | FOA-sep | 21.41 | 14.22 |
-| Qwen3.5-Omni-Plus | FOA-W | 24.75 | 19.45 |
-| Qwen3.5-Omni-Plus | FOA-sep | 26.52 | 21.86 |
-| BAT | Binaural | 0.07 | 0.04 |
-| MiDasheng-Spatial | Binaural | 13.23 | 15.36 |
-| Spatial-Omni-7B | FOA | 13.66 | 12.55 |
-| Spatial-Omni-30B | FOA | 18.54 | 12.72 |
-| JAEGER Neural | FOA | 2.80 | 6.58 |
-| JAEGER Classical | FOA | 0.94 | 1.21 |
-| Qwen3.8-Omni-Flash | FOA | 30.18 | 15.90 |
-| MESH-agent | FOA | 34.97 | 31.01 |
-
-FOA-W supplies the W channel; FOA-sep supplies four separately labeled mono
-channels. Input conditions and model adapters remain explicit in the
-[baseline registry](demo/data/baselines.json). See the [complete task results](docs/results.md)
-for accuracy, uncapped WER, empty-region handling and interpretation.
-
-## Evaluate and reproduce
-
-Use Python 3.12. Install the evaluation package from the cloned repository:
+Use Python 3.12. The commands below use Bash and run from the repository root.
+Loading, postprocessing and scoring run on CPU; your model adapter determines
+the inference dependencies and hardware requirements.
 
 ```bash
+git clone https://github.com/Wenanzhi/MESH-Benchmark.git
+cd MESH-Benchmark
+python3.12 -m venv .venv
+source .venv/bin/activate
 python -m pip install -e .
+python -m pip install huggingface_hub
 ```
 
-Follow the [full evaluation procedure](docs/evaluation.md) for model inputs,
-fixed response processing, official task scoring and Overall aggregation.
-The scorer, processing policy and original tests are preserved from the initial
-evaluation toolkit. This release performs no new inference or rescoring.
+## Dataset preparation
 
-| Documentation | Contents |
-| --- | --- |
-| [Dataset](docs/dataset.md) | Complete release, counts, audio format and file layout |
-| [Tasks and inputs](docs/tasks-and-inputs.md) | Task codes, permitted metadata and output conventions |
-| [Evaluation](docs/evaluation.md) | Formal processing and scoring commands |
-| [Reproducibility](docs/reproducibility.md) | Frozen revisions, configuration records and verification |
-| [Explorer](docs/demo.md) | Output coverage, local serving and export regeneration |
-| [Licenses](docs/licenses-and-attributions.md) | Code, dataset and third-party asset terms |
-| [Contributing](CONTRIBUTING.md) | Bug reports and baseline result submissions |
+Download the complete release at the revision used for the published evaluation:
 
-The release binds dataset revision `f7ca282fbb610206fe12336037c6cd0e587a7e55`,
-task protocol `dish_exhibition_v3.tasks.3`, scorer `dish_exhibition_v3.score.4`
-and Overall `dish_case_equal_two_objectives_v1`.
-Legacy `edge` / `cloud` JSON keys are retained for compatibility.
-See [release metadata](release.json) and the [changelog](CHANGELOG.md).
+```bash
+export MESH_DATASET="$PWD/data/MESH-Benchmark"
+hf download Heiheihaha17/MESH-Benchmark \
+  --repo-type dataset \
+  --revision f7ca282fbb610206fe12336037c6cd0e587a7e55 \
+  --local-dir "$MESH_DATASET"
+```
+
+Keep the released directory structure, indices and completion receipts intact:
+
+```text
+MESH-Benchmark/
+├── static/
+│   ├── release.complete.json
+│   ├── public/                  # Audio, prompts, inputs and question index
+│   └── private/test/gold.jsonl  # Scoring references
+└── dynamic/                     # Same layout
+```
+
+Audio is 16 kHz, four-channel FOA in ACN/SN3D `[W, Y, Z, X]` order.
+Egocentric questions receive the focal recording and permitted peer metadata;
+allocentric questions receive all bound receiver recordings and permitted metadata.
+Preserve channel order and receiver identities. Keep `private/` references out of
+model inputs. See [dataset details](docs/dataset.md) and [task definitions](docs/tasks-and-inputs.md).
+
+## Prepare predictions
+
+Choose a new run directory for each model and input configuration:
+
+```bash
+export MESH_RUN="$PWD/runs/my-model"
+mkdir -p "$MESH_RUN"
+```
+
+Load permitted inputs through the public loader:
+
+```python
+import os
+from pathlib import Path
+from exhibition_v3.loader import Dataset
+
+dataset = Dataset(Path(os.environ["MESH_DATASET"]) / "static")
+sample = dataset.load(dataset.ids()[0])
+# sample["prompt"] contains the task instructions and permitted context.
+# sample["audio"] is a list of receiver recordings, each shaped [samples, 4].
+```
+
+Use `dynamic` for dynamic questions and `audio=False` for prompt inspection.
+Implement your own model/API adapter; model-specific baseline adapters are not
+bundled with this evaluation package. Choose one of the following output routes.
+
+### A. Raw model text
+
+Save one JSON object per line to `$MESH_RUN/raw_static.jsonl` and
+`$MESH_RUN/raw_dynamic.jsonl`. Use the actual question ID, public task ID and
+unaltered model response; this line illustrates the format:
+
+```json
+{"sample_id":"<question ID>","task_id":"DOA_RANGE_ASR","raw_text":"<model response>"}
+```
+
+Preserve failed requests in a separate failure log. Do not turn a failed request
+or null response into an empty transcript. Apply the fixed text processor in
+[Evaluation](#evaluation).
+
+### B. Structured predictions
+
+If your model already returns the task's required JSON value, save rows with
+`sample_id` and `output`. For a transcription task, for example:
+
+```json
+{"sample_id":"<question ID>","output":"<recognized transcript>"}
+```
+
+The general runner can write these files. Implement `predict(sample)` in your
+own `my_model.py` at the repository root; return only the task-specific output
+value as specified by the prompt. The runner adds `sample_id` and iterates over
+all released question IDs by default:
+
+```bash
+python -m exhibition_dataset.loader \
+  --root "$MESH_DATASET/static" --adapter my_model:predict \
+  --output "$MESH_RUN/predictions/static.jsonl"
+python -m exhibition_dataset.loader \
+  --root "$MESH_DATASET/dynamic" --adapter my_model:predict \
+  --output "$MESH_RUN/predictions/dynamic.jsonl"
+
+export MESH_STATIC_PRED="$MESH_RUN/predictions/static.jsonl"
+export MESH_DYNAMIC_PRED="$MESH_RUN/predictions/dynamic.jsonl"
+```
+
+Rerunning the same command resumes IDs absent from the output file. Keep failures
+explicit (for example, `output: null` plus a separate error log). These predictions
+go directly to [task scoring](#2-score-static-and-dynamic-tasks); the raw-text
+processor requires a different input schema.
+
+## Evaluation
+
+### 1. Process raw text (route A only)
+
+```bash
+python postprocess/postprocess_predictions.py \
+  --predictions "$MESH_RUN/raw_static.jsonl" \
+  --output-dir "$MESH_RUN/processed/static"
+python postprocess/postprocess_predictions.py \
+  --predictions "$MESH_RUN/raw_dynamic.jsonl" \
+  --output-dir "$MESH_RUN/processed/dynamic"
+
+export MESH_STATIC_PRED="$MESH_RUN/processed/static/reviewed_predictions.jsonl"
+export MESH_DYNAMIC_PRED="$MESH_RUN/processed/dynamic/reviewed_predictions.jsonl"
+```
+
+Each output directory must be new. The processor writes normalized predictions,
+`reviewed_predictions.jsonl`, `postprocess_audit.jsonl` and
+`postprocess_complete.json`. Use the reviewed files for scoring. See the
+[processing policy](docs/evaluation.md#fixed-response-processing) for details.
+
+### 2. Score static and dynamic tasks
+
+Run this step with the prediction paths from either route above:
+
+```bash
+python -m exhibition_v3.score \
+  --root "$MESH_DATASET/static" --predictions "$MESH_STATIC_PRED" \
+  --output "$MESH_RUN/scores/static"
+python -m exhibition_v3.score \
+  --root "$MESH_DATASET/dynamic" --predictions "$MESH_DYNAMIC_PRED" \
+  --output "$MESH_RUN/scores/dynamic"
+```
+
+Each score directory contains `metrics.json` (task summaries) and
+`per_sample.jsonl.gz` (per-question scores). Missing or invalid predictions remain
+in the full evaluation population and reduce accuracy/coverage.
+
+### 3. Compute Overall
+
+```bash
+python overall/overall_score.py \
+  --model my-model \
+  --static "$MESH_RUN/scores/static/per_sample.jsonl.gz" \
+  --dynamic "$MESH_RUN/scores/dynamic/per_sample.jsonl.gz" \
+  --static-index "$MESH_DATASET/static/public/test/index.jsonl" \
+  --dynamic-index "$MESH_DATASET/dynamic/public/test/index.jsonl" \
+  --output-dir "$MESH_RUN/scores/overall"
+```
+
+The Overall directory must be new. Read `scores.csv` for Egocentric and Allocentric
+Overall, and `overall_complete.json` to confirm completion. Task/split summaries
+and per-question weighted scores are also saved. Aggregation requires all 39,999
+scored questions and includes empty-region cases. See the
+[evaluation protocol](docs/evaluation.md#overall-scores) for weighting and metrics.
+
+## Run the demo
+
+Open the [hosted explorer](https://wenanzhi.github.io/MESH-Benchmark/), or serve it locally:
+
+```bash
+python -m http.server 8000 --bind 127.0.0.1 --directory demo
+```
+
+Visit <http://127.0.0.1:8000>. The explorer displays frozen results; it does not run
+models. Audio and scene/reference assets load on demand over the network, so
+local serving does not require downloading the complete dataset. See
+[demo usage and coverage](docs/demo.md).
+
+## Further documentation
+
+- [Tasks and permitted inputs](docs/tasks-and-inputs.md) · [Dataset](docs/dataset.md)
+- [Published results](docs/results.md) · [Evaluation details](docs/evaluation.md)
+- [Reproducibility and checks](docs/reproducibility.md) · [Release versions](release.json)
+- [Contributing and result submissions](CONTRIBUTING.md) · [Report an issue](https://github.com/Wenanzhi/MESH-Benchmark/issues)
 
 ## Citation
 
@@ -128,14 +214,9 @@ See [release metadata](release.json) and the [changelog](CHANGELOG.md).
 }
 ```
 
-Machine-readable citation metadata is provided in [CITATION.cff](CITATION.cff).
-
 ## License and contact
 
 Project-authored code and documentation use [Apache-2.0](LICENSE).
-Dataset recordings, source speech, environmental audio, HRTFs, model weights
-and reused player components retain their [respective licenses](docs/licenses-and-attributions.md).
-
-For bugs or result submissions, use [GitHub issues](https://github.com/Wenanzhi/MESH-Benchmark/issues).
-For research questions: [Wen Wen](mailto:wenyideng@sjtu.edu.cn) and
+Data and third-party components retain their [respective licenses](docs/licenses-and-attributions.md).
+Research contact: [Wen Wen](mailto:wenyideng@sjtu.edu.cn) and
 [Bohan Li](mailto:everlastingnight@sjtu.edu.cn).
